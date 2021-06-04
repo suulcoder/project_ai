@@ -49,15 +49,20 @@ def loadCluster():
     cmap_bold = ['darkorange', 'c', 'darkblue']
     X = TSNE(n_components=2).fit_transform(data)
     clusters = neighbors.KNeighborsClassifier(10, weights='uniform')
-    clusters.fit(X[:, :1], X[:1, :2])
-    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    clusters.fit(X[:, 0], X[:, 1])
+    x_min = X[:, 0].min() - 1
+    x_max = X[:, 0].max() + 1
+    y_min = X[:, 1].min() - 1
+    y_max = X[:, 1].max() + 1
     horizontal, vertical = np.meshgrid(np.arange(x_min, x_max, h),
                         np.arange(y_min, y_max, h))
     prediction = clusters.predict(np.c_[horizontal.ravel(), vertical.ravel()])
     prediction = prediction.reshape(horizontal.shape)
     plt.figure(figsize=(8, 6))
-    plt.contourf(horizontal, vertical, prediction, cmap=cmap_light)
+    plt.contourf(horizontal, 
+                vertical, 
+                prediction, 
+                cmap=cmap_light)
     sns.scatterplot(x=X[:, 0],
                     y=X[:, 1], 
                     palette=cmap_bold, 
@@ -67,9 +72,11 @@ def loadCluster():
     plt.ylim(vertical.min(), vertical.max())
 
     clusters = neighbors.KNeighborsClassifier(10, weights='distance')
-    clusters.fit(X, y)
-    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    clusters.fit(X[:, 0], X[:, 1])
+    x_min = X[:, 0].min() - 1
+    x_max = X[:, 0].max() + 1
+    y_min = X[:, 1].min() - 1
+    y_max = X[:, 1].max() + 1
     horizontal, vertical = np.meshgrid(np.arange(x_min, x_max, h),
                         np.arange(y_min, y_max, h))
     prediction = clusters.predict(np.c_[horizontal.ravel(), 
