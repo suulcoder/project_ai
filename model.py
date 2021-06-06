@@ -13,6 +13,7 @@ from PIL import Image
 
 data = []
 samples = []
+size = 1000
 
 def img_into_matrix(img, hasPath=True):
     filename = img
@@ -25,7 +26,7 @@ def img_into_matrix(img, hasPath=True):
         )
     print(filename)
     image = Image.open(filename)
-    matrix = np.asarray(image.resize((50,50)), dtype=np.float32)
+    matrix = np.asarray(image.resize((size,size)), dtype=np.float32)
     new_matrix = []
 
     for i in matrix:
@@ -47,21 +48,17 @@ with open('./Data/train.csv', newline='') as csvfile:
             data.append(img_into_matrix(row[0]))
             samples.append(row[0])
         i+=1
-        """
-        if(i>50):
-            break
-        """
 
 #get 10 related neighbors
 def get_related(img,number=10):
     matrix = img_into_matrix(img,False)
     model = NearestNeighbors(n_neighbors=number)
     model.fit(data)
-    result = model.kneighbors([matrix], return_distance=False)
+    result = model.kneighbors([matrix])
     my_result = []
-    for i in result[0]:
+    for i in result[1][0]:
         my_result.append(samples[i])
-    return(my_result)
+    return(my_result,result[0][0])
 
 def loadCluster():
     cmap_light = ListedColormap(['orange', 'cyan', 'cornflowerblue'])
