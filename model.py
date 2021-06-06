@@ -13,7 +13,7 @@ from PIL import Image
 
 data = []
 samples = []
-size = 1000
+size = 300
 
 def img_into_matrix(img, hasPath=True):
     filename = img
