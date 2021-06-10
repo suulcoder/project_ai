@@ -25,32 +25,24 @@ first_column = [
     [
         sg.Text("Error Image 1:",key="distance0"),
         sg.Text("Error Image 2:",key="distance1"),
-    ],
-    [
-        sg.Image(key="image_0"),
-        sg.Image(key="image_1"),
-    ],
-    [
         sg.Text("Error Image 3:",key="distance2"),
         sg.Text("Error Image 4:",key="distance3"),
     ],
     [
+        sg.Image(key="image_0"),
+        sg.Image(key="image_1"),
         sg.Image(key="image_2"),
         sg.Image(key="image_3"),
     ],
     [
         sg.Text("Error Image 5:",key="distance4"),
         sg.Text("Error Image 6:",key="distance5"),
-    ],
-    [
-        sg.Image(key="image_4"),
-        sg.Image(key="image_5")
-    ],
-    [
         sg.Text("Error Image 7:",key="distance6"),
         sg.Text("Error Image 8:",key="distance7"),
     ],
     [
+        sg.Image(key="image_4"),
+        sg.Image(key="image_5"),
         sg.Image(key="image_6"),
         sg.Image(key="image_7"),
     ],
@@ -105,7 +97,7 @@ while True:
         window["image_chosen"].update(filename=new_file)
         index = 0
         related = get_related(filename)
-        max_distance =size*255/2
+        max_distance = math.sqrt(size*(765 * size)**2)
         for image in related[0]:
             distance = related[1][index]
             key_image = "image_" + str(index)
@@ -116,13 +108,13 @@ while True:
                 filepath, image
             )
             image_ = Image.open(filename_)
-            new_image_ = image_.resize((100,int(100*ratio)), Image.ANTIALIAS)
+            new_image_ = image_.resize((60,int(60*ratio)), Image.ANTIALIAS)
             new_image_.save(str(index) + '.png')
             new_file_ = os.path.join(
                 os.getcwd(), str(index) + '.png'
             )
             window[key_image].update(filename=new_file_)
             error_key = 'distance' + str(index)
-            window[error_key].update(value="error: {distance:.2f} %".format(distance=(100*(distance/max_distance))))
+            window[error_key].update(value="error: {distance:.2f} %".format(distance=(10000*(distance/max_distance))))
             index+=1
 window.close()

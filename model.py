@@ -13,7 +13,7 @@ from PIL import Image
 
 data = []
 samples = []
-size = 300
+size = 100
 
 def img_into_matrix(img, hasPath=True):
     filename = img
@@ -60,60 +60,4 @@ def get_related(img,number=10):
         my_result.append(samples[i])
     return(my_result,result[0][0])
 
-def loadCluster():
-    cmap_light = ListedColormap(['orange', 'cyan', 'cornflowerblue'])
-    cmap_bold = ['darkorange', 'c', 'darkblue']
-    X = TSNE(n_components=2).fit_transform(data)
-    clusters = neighbors.KNeighborsClassifier(10, weights='uniform')
-    clusters.fit(X[:, 0], X[:, 1])
-    x_min = X[:, 0].min() - 1
-    x_max = X[:, 0].max() + 1
-    y_min = X[:, 1].min() - 1
-    y_max = X[:, 1].max() + 1
-    horizontal, vertical = np.meshgrid(np.arange(x_min, x_max, h),
-                        np.arange(y_min, y_max, h))
-    prediction = clusters.predict(np.c_[horizontal.ravel(), vertical.ravel()])
-    prediction = prediction.reshape(horizontal.shape)
-    plt.figure(figsize=(8, 6))
-    plt.contourf(horizontal, 
-                vertical, 
-                prediction, 
-                cmap=cmap_light)
-    sns.scatterplot(x=X[:, 0],
-                    y=X[:, 1], 
-                    palette=cmap_bold, 
-                    alpha=1.0, 
-                    edgecolor="black")
-    plt.xlim(horizontal.min(), horizontal.max())
-    plt.ylim(vertical.min(), vertical.max())
 
-    clusters = neighbors.KNeighborsClassifier(10, weights='distance')
-    clusters.fit(X[:, 0], X[:, 1])
-    x_min = X[:, 0].min() - 1
-    x_max = X[:, 0].max() + 1
-    y_min = X[:, 1].min() - 1
-    y_max = X[:, 1].max() + 1
-    horizontal, vertical = np.meshgrid(np.arange(x_min, x_max, h),
-                        np.arange(y_min, y_max, h))
-    prediction = clusters.predict(np.c_[horizontal.ravel(), 
-                        vertical.ravel()])
-    prediction = prediction.reshape(horizontal.shape)
-    plt.figure(figsize=(8, 6))
-
-    plt.contourf(horizontal, 
-                vertical, 
-                prediction, 
-                cmap=cmap_light)
-
-    sns.scatterplot(x=X[:, 0], 
-                    y=X[:, 1], 
-                    palette=cmap_bold, 
-                    alpha=1.0, 
-                    edgecolor="black")
-    plt.xlim(horizontal.min(), horizontal.max())
-    plt.ylim(vertical.min(), vertical.max())
-    plt.show()
-
-new_file = os.path.join(
-    os.getcwd(), 'chosen.png'
-)
